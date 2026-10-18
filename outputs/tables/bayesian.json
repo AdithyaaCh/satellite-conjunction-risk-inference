@@ -1,0 +1,47 @@
+{
+  "0.5": {
+    "n_events": 761,
+    "estimand": "conditional on final log10 risk > -15",
+    "elpd_loo": -296.6727605908468,
+    "p_loo": 6.195317944012004,
+    "elpd_waic": -296.63350525916326,
+    "p_waic": 6.156062612328492,
+    "pareto_k_over_0_7": 0,
+    "rhat_max": 1.01,
+    "ess_bulk_min": 394.0,
+    "divergences": 0,
+    "ppc_90_coverage_in_sample": 0.7739816031537451
+  },
+  "2.0": {
+    "n_events": 761,
+    "estimand": "conditional on final log10 risk > -15",
+    "elpd_loo": -296.7107208126362,
+    "p_loo": 6.014052675897062,
+    "elpd_waic": -296.66995581531137,
+    "p_waic": 5.973287678572273,
+    "pareto_k_over_0_7": 0,
+    "rhat_max": 1.01,
+    "ess_bulk_min": 383.0,
+    "divergences": 0,
+    "ppc_90_coverage_in_sample": 0.7726675427069645,
+    "conditional_test": {
+      "n": 205,
+      "mae": 1.4626765055164472,
+      "coverage90": 0.7902439024390244,
+      "width90": 4.173762896281117
+    }
+  },
+  "hierarchical": {
+    "events": 100,
+    "cdms": 616,
+    "estimand": "conditional on CDM log10 risk > -15 and within-event nonfloor range <= 5",
+    "missions": 11,
+    "rhat_max": 1.01,
+    "ess_bulk_min": 823.0,
+    "rhat_max_displayed": 1.0,
+    "ess_bulk_min_displayed": 823.0,
+    "divergences": 0,
+    "ppc_90_coverage_in_sample": 0.9318181818181818,
+    "note": "PPC is in-sample; conditional random effects cannot be used as new-event LOO. Satellite identity is unavailable. Abrupt-revision events are excluded from this focused demonstration after multimodal NUTS diagnostics."
+  }
+}

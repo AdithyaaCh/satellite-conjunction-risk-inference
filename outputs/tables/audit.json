@@ -1,0 +1,56 @@
+{
+  "cdms": 199082,
+  "events": 15321,
+  "columns": 103,
+  "events_final_within_24h": 11630,
+  "high_risk_1e5_all": 131,
+  "high_risk_1e4_all": 30,
+  "floor_final_fraction": 0.6541348475948046,
+  "mission_count": 19,
+  "per_horizon": {
+    "48": {
+      "events": 10460,
+      "high_risk_1e5": 79,
+      "train": 6282,
+      "test": 1564
+    },
+    "72": {
+      "events": 9790,
+      "high_risk_1e5": 69,
+      "train": 5869,
+      "test": 1462
+    },
+    "96": {
+      "events": 9072,
+      "high_risk_1e5": 65,
+      "train": 5460,
+      "test": 1354
+    },
+    "120": {
+      "events": 8300,
+      "high_risk_1e5": 60,
+      "train": 4970,
+      "test": 1251
+    }
+  },
+  "top_missing": {
+    "c_rcs_estimate": 0.3213,
+    "c_cndot_tdot": 0.0562,
+    "c_crdot_r": 0.0562,
+    "c_crdot_t": 0.0562,
+    "c_crdot_n": 0.0562,
+    "c_ctdot_t": 0.0562,
+    "c_ctdot_n": 0.0562,
+    "c_ctdot_rdot": 0.0562,
+    "c_cndot_r": 0.0562,
+    "c_cndot_t": 0.0562,
+    "c_cndot_n": 0.0562,
+    "c_ctdot_r": 0.0562,
+    "c_sigma_ndot": 0.0562,
+    "c_sigma_rdot": 0.0562,
+    "c_sigma_tdot": 0.0562
+  },
+  "risk_missing": 0.0,
+  "duplicate_event_time": 0,
+  "note": "Dates and satellite identities are anonymised. Event partition is disjoint; mission transfer is a separate sensitivity analysis."
+}

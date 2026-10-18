@@ -1,0 +1,83 @@
+{
+  "common_horizon_xgboost": [
+    {
+      "horizon_h": 120,
+      "n": 1251,
+      "mae": 0.9384659727702601,
+      "interval_coverage90": 0.9160671462829736
+    },
+    {
+      "horizon_h": 96,
+      "n": 1251,
+      "mae": 0.8768262067178059,
+      "interval_coverage90": 0.9152677857713829
+    },
+    {
+      "horizon_h": 72,
+      "n": 1251,
+      "mae": 0.784446996425579,
+      "interval_coverage90": 0.9216626698641087
+    },
+    {
+      "horizon_h": 48,
+      "n": 1251,
+      "mae": 0.6403398069707738,
+      "interval_coverage90": 0.9096722621902478
+    }
+  ],
+  "subgroups_72h": {
+    "sparse_1to3": {
+      "n": 218,
+      "mae": 1.138550642655936,
+      "high_risk_1e5": 1
+    },
+    "dense_4plus": {
+      "n": 1244,
+      "mae": 0.7950286356322537,
+      "high_risk_1e5": 6
+    },
+    "low_LEO": {
+      "n": 300,
+      "mae": 0.6580494420973994,
+      "high_risk_1e5": 1
+    },
+    "middle_LEO": {
+      "n": 735,
+      "mae": 0.8064076803534437,
+      "high_risk_1e5": 3
+    },
+    "upper_LEO": {
+      "n": 427,
+      "mae": 1.047061323504723,
+      "high_risk_1e5": 3
+    }
+  },
+  "mission_transfer": {
+    "held_out_mission": 15,
+    "n": 244,
+    "mae": 0.9193817588247876,
+    "note": "Mission is only a proxy for repeated spacecraft; exact identity and dates are unavailable."
+  },
+  "official_48h": {
+    "train_eligible": 8293,
+    "test_eligible": 2167,
+    "train_high_fraction": 0.0027734233691064755,
+    "test_high_fraction": 0.025842178126442086,
+    "test_regression_mae": 1.0583332228616036,
+    "test_top5pct_precision": 0.3577981651376147,
+    "test_top5pct_recall": 0.6964285714285714,
+    "warning_fraction": 0.050299953853253344,
+    "note": "Official event IDs overlap across files but identify different encounters; the split is kept separate."
+  },
+  "warning_bootstrap_72h": {
+    "precision_ci95": [
+      0.012345679012345678,
+      0.10813267813267811
+    ],
+    "recall_ci95": [
+      0.14285714285714285,
+      1.0
+    ],
+    "resample_unit": "event"
+  }
+}
