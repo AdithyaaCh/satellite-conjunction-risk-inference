@@ -13,17 +13,16 @@
 \begin{center}
 {\LARGE\bfseries Statistical Modelling of Satellite Conjunction Dynamics, Collision Risk and Uncertainty}\par\vspace{0.25cm}
 {\large An event-level analysis of the ESA Collision Avoidance Challenge archive}\par\vspace{0.2cm}
-Research report \quad 19 October 2026
 \end{center}
 \vspace{0.25cm}
 \textbf{Abstract.} Repeated conjunction data messages (CDMs) update orbital geometry, covariance and a calculated collision-risk estimate as closest approach nears. This study asks whether early final-risk estimation benefits from explicit statistical uncertainty modelling. We analysed 199,082 CDMs from 15,321 anonymised events in the ESA 2015--2019 archive. Horizon-specific cohorts used only CDMs available at least 120, 96, 72 or 48 hours before time of closest approach (TCA), and required a final report within 24 hours. Entire events were partitioned before modelling. Outcomes were the last reported log$_{10}$ risk estimate, capped at $-15$ for full-sample regression, and an indicator of final reported risk at least $10^{-5}$. A frequentist suite, a conditional Bayesian continuous-risk model, tree ensembles and compact sequence networks were compared. On the same 1,251 held-out events, XGBoost mean absolute error (MAE) improved from 0.938 at 120 hours to 0.640 at 48 hours. At 72 hours, XGBoost improved MAE over linear regression by 0.176 (event-bootstrap 95\% interval 0.144--0.205), while a GRU modestly outperformed the forest by 0.052 (interval 0.019--0.085). A 72-hour XGBoost warning rule recalled 4 of 7 high-final-risk events, with 69 false alarms and 5.5\% precision. Nominal 90\% conformal intervals had roughly 90--92\% held-out coverage; Bayesian conditional posterior predictive intervals covered only about 77\% in sample. The evidence supports nonlinear prediction gains and more information closer to TCA, but does not establish superior Bayesian calibration or operational collision prediction.
 
 \textbf{Keywords:} conjunction data messages; event dependence; risk revision; mixed effects; Bayesian inference; calibration; early warning.
 
-\textbf{Research question.} Under what conditions does statistically principled uncertainty modelling improve early assessment of \emph{reported final risk}, and when are simpler or more complex predictive models preferable?
+\textbf{Analysis question.} Under what conditions does statistically principled uncertainty modelling improve early assessment of \emph{reported final risk}, and when are simpler or more complex predictive models preferable?
 
 \vfill
-\textbf{Data and code:} \url{https://zenodo.org/records/4463683}; repository scripts and saved outputs accompany this report. No physical collision labels are used.
+\textbf{Data and code:} \url{https://zenodo.org/records/4463683}; repository scripts and saved outputs accompany this analysis. No physical collision labels are used.
 \clearpage
 \section{Scientific setting, data provenance and estimands}
 A CDM is a time-stamped assessment of one close approach. ESA's public archive contains 103 columns per row, including a base-10 log risk estimate, TCA lead time in days, mission identifier, miss distance, relative speed, object type, orbital elements and covariance summaries \cite{esa-data,esa-doc}. CDMs within an event form a short, irregular time series. The target of the original challenge is the risk in the last CDM, treated as the best available estimate, rather than an observed collision frequency \cite{uriot2020}. We therefore distinguish \emph{forecasting a later computed quantity} from calibrating physical collision probabilities.

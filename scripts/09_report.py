@@ -1,4 +1,4 @@
-"""Fill verified Bayesian values and compile the editable research paper."""
+"""Fill verified Bayesian values and compile the analysis PDF."""
 import json,subprocess
 from pathlib import Path
 b=json.loads(Path('outputs/tables/bayesian.json').read_text())['2.0']['conditional_test']

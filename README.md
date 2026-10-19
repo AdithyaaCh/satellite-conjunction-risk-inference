@@ -2,7 +2,7 @@
 
 Statistical analysis of how satellite collision-risk **estimates** change as a close approach nears. Using the [ESA Collision Avoidance Challenge dataset](https://zenodo.org/records/4463683), this project compares frequentist and Bayesian inference with tree and sequence models at 120, 96, 72, and 48 hours before time of closest approach (TCA).
 
-**Read the [14-page research report](reports/technical_report.pdf)** for the methods, diagnostics, limitations, and full results. The outcome is the **last reported risk estimate for an encounter**. The data do not contain observed collisions, so these models do not estimate physical collision frequency.
+**Read the [14-page analysis](reports/technical_report.pdf)** for the methods, diagnostics, limitations, and full results. The outcome is the **last reported risk estimate for an encounter**. The data do not contain observed collisions, so these models do not estimate physical collision frequency.
 
 ## Results at a glance
 
@@ -12,17 +12,17 @@ Statistical analysis of how satellite collision-risk **estimates** change as a c
 | XGBoost versus linear regression at 72 h | 0.176 lower MAE; event-bootstrap 95% CI 0.144–0.205 |
 | 72 h warning for final reported risk ≥ 10⁻⁵ | 4 of 7 events detected; 69 false alarms; 5.5% precision |
 
-The rare high-risk category makes warning estimates unstable. Marginal 90% conformal intervals covered roughly 90–92% of held-out outcomes; a focused Bayesian model's intervals undercovered. See the report before interpreting any model as an operational warning system.
+The rare high-risk category makes warning estimates unstable. Marginal 90% conformal intervals covered roughly 90–92% of held-out outcomes; a focused Bayesian model's intervals undercovered. See the analysis before interpreting any model as an operational warning system.
 
 ## Repository layout
 
 | Path | Contents |
 |---|---|
-| [`reports/technical_report.pdf`](reports/technical_report.pdf) | Finished paper; editable LaTeX source is alongside it |
+| [`reports/technical_report.pdf`](reports/technical_report.pdf) | Analysis PDF; editable LaTeX source is alongside it |
 | [`src/conjunctions/data.py`](src/conjunctions/data.py) | Event partitions and leakage-aware horizon snapshots |
-| [`scripts/`](scripts/) | Numbered preparation, analysis, validation, and report steps |
+| [`scripts/`](scripts/) | Numbered preparation, modelling, validation, and PDF steps |
 | [`outputs/tables/`](outputs/tables/) | Result summaries, coefficients, and prediction-level evidence |
-| [`outputs/figures/`](outputs/figures/) | Figures used in the paper |
+| [`outputs/figures/`](outputs/figures/) | Figures used in the analysis |
 | [`outputs/models/`](outputs/models/) | Saved neural-network states and Bayesian posterior draws |
 | [`requirements.lock`](requirements.lock) | Exact Python package versions used for this run |
 
@@ -57,7 +57,7 @@ Use Python 3.10 and [Tectonic](https://tectonic-typesetting.github.io/) for the 
 
 ## Study design
 
-The 199,082 conjunction data messages represent 15,321 anonymized encounters. At each horizon, predictors use only messages available by that cutoff; the target is the event's later final message, required to be within 24 hours of TCA. Entire events share one train, validation, calibration, or test partition. Regression uses final log₁₀ risk capped below at −15, and the warning task labels final reported risk ≥ 10⁻⁵. [The paper](reports/technical_report.pdf) gives the cohort sizes and all model specifications.
+The 199,082 conjunction data messages represent 15,321 anonymized encounters. At each horizon, predictors use only messages available by that cutoff; the target is the event's later final message, required to be within 24 hours of TCA. Entire events share one train, validation, calibration, or test partition. Regression uses final log₁₀ risk capped below at −15, and the warning task labels final reported risk ≥ 10⁻⁵. [The analysis](reports/technical_report.pdf) gives the cohort sizes and all model specifications.
 
 The archive is selected through ESA screening and its competition test set is enriched for higher risk. Exact satellite identities and calendar dates are unavailable, so satellite-disjoint and chronological tests cannot be performed. Inference applies to the eligible archive encounters and to **future reported risk estimates**, not to observed impacts.
 
