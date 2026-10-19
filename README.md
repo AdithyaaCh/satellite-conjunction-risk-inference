@@ -4,7 +4,7 @@ Satellite collision-risk estimates get revised as new tracking data arrives. I u
 
 The [five-page project write-up](reports/technical_report.pdf) explains the setup and results without the detail of every experiment. The outcome here is a later *calculated estimate*, not an observed collision.
 
-## What I found
+## Findings
 
 - On the same 1,251 test encounters, XGBoost's mean absolute error fell from **0.938 at 120 hours** before closest approach to **0.640 at 48 hours**.
 - At 72 hours, tree models and a GRU beat the linear regression baseline on final-risk estimation. XGBoost reduced MAE by **0.176** versus linear regression (event-bootstrap 95% interval: 0.144 to 0.205).
