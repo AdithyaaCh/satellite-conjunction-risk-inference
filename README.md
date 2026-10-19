@@ -1,68 +1,55 @@
-# Satellite Conjunction Risk Inference
+# Satellite Conjunction Risk: Statistical Analysis
 
-Statistical analysis of how satellite collision-risk **estimates** change as a close approach nears. Using the [ESA Collision Avoidance Challenge dataset](https://zenodo.org/records/4463683), this project compares frequentist and Bayesian inference with tree and sequence models at 120, 96, 72, and 48 hours before time of closest approach (TCA).
+Satellite collision-risk estimates get revised as new tracking data arrives. I used the [ESA Collision Avoidance Challenge dataset](https://zenodo.org/records/4463683) to ask a practical question: how well can an earlier assessment predict the **last reported risk estimate** for the same encounter?
 
-**Read the [14-page analysis](reports/technical_report.pdf)** for the methods, diagnostics, limitations, and full results. The outcome is the **last reported risk estimate for an encounter**. The data do not contain observed collisions, so these models do not estimate physical collision frequency.
+The [five-page project write-up](reports/technical_report.pdf) explains the setup and results without the detail of every experiment. The outcome here is a later *calculated estimate*, not an observed collision.
 
-## Results at a glance
+## What I found
 
-| Finding | Held-out result |
-|---|---:|
-| XGBoost MAE on the same 1,251 events | 0.938 at 120 h; 0.640 at 48 h |
-| XGBoost versus linear regression at 72 h | 0.176 lower MAE; event-bootstrap 95% CI 0.144–0.205 |
-| 72 h warning for final reported risk ≥ 10⁻⁵ | 4 of 7 events detected; 69 false alarms; 5.5% precision |
+- On the same 1,251 test encounters, XGBoost's mean absolute error fell from **0.938 at 120 hours** before closest approach to **0.640 at 48 hours**.
+- At 72 hours, tree models and a GRU beat the linear regression baseline on final-risk estimation. XGBoost reduced MAE by **0.176** versus linear regression (event-bootstrap 95% interval: 0.144 to 0.205).
+- Good average error did not make for clean alerts. The 72-hour XGBoost warning caught **4 of 7** encounters with high final reported risk, alongside **69 false alarms**. These are small counts, so the warning result is fragile.
+- Intervals calibrated on held-out encounters reached roughly **90–92% coverage** at a 90% target. A Bayesian model for the nonfloor subset undercovered, despite acceptable sampling diagnostics.
 
-The rare high-risk category makes warning estimates unstable. Marginal 90% conformal intervals covered roughly 90–92% of held-out outcomes; a focused Bayesian model's intervals undercovered. See the analysis before interpreting any model as an operational warning system.
+## How I kept the comparison fair
 
-## Repository layout
+The archive has 199,082 conjunction data messages (CDMs) from 15,321 encounters. For each prediction horizon—120, 96, 72 or 48 hours—I used only CDMs available by that cutoff. All records from an encounter stay in one train, validation, calibration or test partition. The last CDM supplies the target only after the cutoff. [`scripts/08_validate.py`](scripts/08_validate.py) checks these rules against the source data.
 
-| Path | Contents |
-|---|---|
-| [`reports/technical_report.pdf`](reports/technical_report.pdf) | Analysis PDF; editable LaTeX source is alongside it |
-| [`src/conjunctions/data.py`](src/conjunctions/data.py) | Event partitions and leakage-aware horizon snapshots |
-| [`scripts/`](scripts/) | Numbered preparation, modelling, validation, and PDF steps |
-| [`outputs/tables/`](outputs/tables/) | Result summaries, coefficients, and prediction-level evidence |
-| [`outputs/figures/`](outputs/figures/) | Figures used in the analysis |
-| [`outputs/models/`](outputs/models/) | Saved neural-network states and Bayesian posterior draws |
-| [`requirements.lock`](requirements.lock) | Exact Python package versions used for this run |
+The risk field has a large floor at log₁₀ risk = −30. Regression caps final log-risk below at −15; the warning task asks whether the final reported risk reaches 10⁻⁵. The archive was screened before release, high-risk encounters are rare, and spacecraft identities and calendar dates are unavailable. That limits how far these test results can be carried into operations.
 
-Raw ESA data, the Python environment, logs, and intermediate Parquet files are excluded from Git. The data remain under their original ESA terms at the linked source.
+## Files
 
-## Reproduce
+- [`reports/technical_report.pdf`](reports/technical_report.pdf): short write-up. The editable `.tex` file is in the same folder.
+- [`src/conjunctions/data.py`](src/conjunctions/data.py): loading, event splits and horizon snapshots.
+- [`scripts/`](scripts/): numbered analysis steps.
+- [`outputs/tables/`](outputs/tables/), [`outputs/figures/`](outputs/figures/) and [`outputs/models/`](outputs/models/): saved results, plots and model states.
+- [`requirements.lock`](requirements.lock): Python packages used for the recorded run.
 
-Use Python 3.10 and [Tectonic](https://tectonic-typesetting.github.io/) for the PDF. On macOS, XGBoost may also require `brew install libomp`.
+Raw data, logs and intermediate Parquet files are not tracked in Git.
 
-1. Download the archive from [Zenodo](https://zenodo.org/records/4463683). Place its files so these paths exist:
+## Run it
 
-   ```text
-   Collision Avoidance Challenge - Dataset/
-   ├── raw_data/raw_data_2015-2019.gz
-   └── kelvins_competition_data/
-       ├── train_data.zip
-       ├── test_data.csv
-       └── test_data_private.csv
-   ```
+Use Python 3.10 and [Tectonic](https://tectonic-typesetting.github.io/) for the PDF. Download the [ESA archive](https://zenodo.org/records/4463683) and arrange the files like this:
 
-2. From the repository root, install dependencies and run the numbered scripts:
+```text
+Collision Avoidance Challenge - Dataset/
+├── raw_data/raw_data_2015-2019.gz
+└── kelvins_competition_data/
+    ├── train_data.zip
+    ├── test_data.csv
+    └── test_data_private.csv
+```
 
-   ```bash
-   python3.10 -m venv .venv
-   .venv/bin/python -m pip install -r requirements.lock
-   for step in 01_prepare 02_frequentist 03_cross_validate 03_predict 04_bayesian 05_sequences 06_robustness 07_figures 08_validate 09_report; do
-     PYTENSOR_FLAGS='cxx=' .venv/bin/python "scripts/$step.py"
-   done
-   ```
+From the repository root:
 
-   The PyTensor setting handles the Apple command-line SDK used in the recorded run. Bayesian sampling and sequence training take longer than the other steps. `08_validate.py` checks event separation, time cutoffs, and target construction before `09_report.py` rebuilds the PDF.
+```bash
+python3.10 -m venv .venv
+.venv/bin/python -m pip install -r requirements.lock
+for step in 01_prepare 02_frequentist 03_cross_validate 03_predict 04_bayesian 05_sequences 06_robustness 07_figures 08_validate 09_report; do
+  PYTENSOR_FLAGS='cxx=' .venv/bin/python "scripts/$step.py"
+done
+```
 
-## Study design
+On macOS, XGBoost may need `brew install libomp`. The PyTensor setting handles the Apple command-line SDK used for this run. Bayesian sampling and sequence training take the longest.
 
-The 199,082 conjunction data messages represent 15,321 anonymized encounters. At each horizon, predictors use only messages available by that cutoff; the target is the event's later final message, required to be within 24 hours of TCA. Entire events share one train, validation, calibration, or test partition. Regression uses final log₁₀ risk capped below at −15, and the warning task labels final reported risk ≥ 10⁻⁵. [The analysis](reports/technical_report.pdf) gives the cohort sizes and all model specifications.
-
-The archive is selected through ESA screening and its competition test set is enriched for higher risk. Exact satellite identities and calendar dates are unavailable, so satellite-disjoint and chronological tests cannot be performed. Inference applies to the eligible archive encounters and to **future reported risk estimates**, not to observed impacts.
-
-## Sources
-
-- [ESA dataset, Zenodo DOI 10.5281/zenodo.4463683](https://doi.org/10.5281/zenodo.4463683)
-- [ESA data and column descriptions](https://kelvins.esa.int/collision-avoidance-challenge/data/)
-- [Uriot et al. (2020), challenge design and results](https://arxiv.org/pdf/2008.03069.pdf)
+Dataset details: [ESA column descriptions](https://kelvins.esa.int/collision-avoidance-challenge/data/) and the [original challenge overview](https://arxiv.org/pdf/2008.03069.pdf).
