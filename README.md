@@ -2,7 +2,7 @@
 
 Satellite collision-risk estimates get revised as new tracking data arrives. I used the [ESA Collision Avoidance Challenge dataset](https://zenodo.org/records/4463683) to ask a practical question: how well can an earlier assessment predict the **last reported risk estimate** for the same encounter?
 
-The [five-page project write-up](reports/technical_report.pdf) explains the setup and results without the detail of every experiment. The outcome here is a later *calculated estimate*, not an observed collision.
+The [project write-up](reports/technical_report.pdf) explains the setup and results without the detail of every experiment. The outcome here is a later *calculated estimate*, not an observed collision.
 
 ## Findings
 
